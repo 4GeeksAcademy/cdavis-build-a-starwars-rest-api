@@ -26,12 +26,10 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 
-# Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
-# generate sitemap with all your endpoints
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
@@ -45,7 +43,46 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-# this only runs if `$ python src/app.py` is executed
+@app.route('/people', methods=['GET'])
+def get_people():
+    return jsonify(people), 200
+
+@app.route('/people/<int:people_id>', methods=['GET'])
+def get_person(people_id):
+    return jsonify(person), 200
+
+@app.route('/planets', methods=['GET'])
+def get_planets():
+    return jsonify(planets), 200
+
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def get_planet(planet_id):
+    return jsonify(planet), 200
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    return jsonify(users), 200
+
+@app.route('/users/favorites', methods=['GET'])
+def get_user_favorites():
+    return jsonify(favorites), 200
+
+@app.route('/favorite/planet/<int:planet_id>', methods=['POST'])
+def add_favorite_planet(planet_id):
+    return jsonify({"message": "Favorite planet added successfully"}), 200
+
+@app.route('/favorite/people/<int:people_id>', methods=['POST'])
+def add_favorite_people(people_id):
+    return jsonify({"message": "Favorite people added successfully"}), 200
+
+@app.route('/favorite/planet/<int:planet_id>', methods=['DELETE'])
+def delete_favorite_planet(planet_id):
+    return jsonify({"message": "Favorite planet deleted successfully"}), 200
+
+@app.route('/favorite/people/<int:people_id>', methods=['DELETE'])
+def delete_favorite_people(people_id):
+    return jsonify({"message": "Favorite people deleted successfully"}), 200
+
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
     app.run(host='0.0.0.0', port=PORT, debug=False)
