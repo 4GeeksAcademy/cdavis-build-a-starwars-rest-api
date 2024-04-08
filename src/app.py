@@ -80,6 +80,7 @@ def get_planets():
     result = []
     for planet in planets:
         result.append({
+            'id': planet.planet_id,
             'name': planet.name,
             'population': planet.population,
             'terrain': planet.terrain,
@@ -101,9 +102,9 @@ def get_planet(planet_id):
     else:
         return jsonify({'error': 'Planet not found'}), 404
 
-@app.route('/users/favorites', methods=['GET'])
-def get_user_favorites():
-    favorites = Favorite.query.all()
+@app.route('/user/<int:user_id>/favorites', methods=['GET'])
+def get_user_favorites(user_id):
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
     result = []
     for favorite in favorites:
         result.append({
@@ -113,10 +114,10 @@ def get_user_favorites():
         })
     return jsonify(result), 200
 
-@app.route('/favorite/planet/<int:planet_id>', methods=['POST'])
-def add_favorite_planet(planet_id):
+@app.route('/favorite/planet/<int:planet_id>/user/<int:user_id>', methods=['POST'])
+def add_favorite_planet(planet_id, user_id):
     # Assuming you have user_id available, you can replace 'user_id' with the actual user ID
-    favorite = Favorite(user_id=1, planet_id=planet_id)
+    favorite = Favorite(user_id=user_id, planet_id=planet_id)
     db.session.add(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite planet added successfully"}), 200
