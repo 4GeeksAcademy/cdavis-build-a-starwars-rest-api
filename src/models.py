@@ -83,6 +83,9 @@ class Favorite(db.Model):
     planet = db.relationship('Planet')
     film_id = db.Column(db.Integer, db.ForeignKey('Film.film_id'))
     film = db.relationship('Film')
+    people_id = db.Column(db.Integer, db.ForeignKey('People.character_id'))
+    people = db.relationship('People')
+    
     
 
 

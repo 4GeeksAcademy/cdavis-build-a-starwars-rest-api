@@ -145,14 +145,14 @@ def get_user_favorites(user_id):
         })
     return jsonify(result), 200
 
-@app.route('/favorite/planet/<int:planet_id>/user/<int:user_id>', methods=['POST']) #FUNCIONA
+@app.route('/favorite/user/<int:user_id>/planet/<int:planet_id>', methods=['POST']) #FUNCIONA
 def add_favorite_planet(planet_id, user_id):
     favorite = Favorite(user_id=user_id, planet_id=planet_id)
     db.session.add(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite planet added successfully"}), 200
 
-@app.route('/favorite/planet/<int:user_id>/<int:planet_id>', methods=['DELETE']) #FUNCIONA
+@app.route('/favorite/user/<int:user_id>/planet/<int:planet_id>', methods=['DELETE']) #FUNCIONA
 def delete_favorite_planet(planet_id, user_id):
     favorite = Favorite.query.filter_by(user_id=user_id, planet_id=planet_id).first()
     if favorite:
@@ -162,15 +162,17 @@ def delete_favorite_planet(planet_id, user_id):
     else:
         return jsonify({'error': 'Favorite planet not found'}), 404
     
-@app.route('/favorite/people/<int:user_id>/<int:people_id>', methods=['POST'])
-def add_favorite_people(people_id,user_id):
-    favorite = Favorite(user_id=user_id, people_id=people_id)  
+@app.route('/favorite/user/<int:user_id>/people/<int:people_id>', methods=['POST'])
+def add_favorite_people(people_id, user_id):
+    favorite = Favorite(user_id=user_id, people_id=people_id)
+    
     db.session.add(favorite)
     db.session.commit()
     return jsonify({"message": "Favorite people added successfully"}), 200
+    
 
-@app.route('/favorite/people/<int:user_id>/<int:people_id>', methods=['DELETE'])
-def delete_favorite_people(people_id,user_id):
+@app.route('/favorite/user/<int:user_id>/people/<int:people_id>', methods=['DELETE'])
+def delete_favorite_people(people_id, user_id):
     favorite = Favorite.query.filter_by(user_id=user_id, people_id=people_id).first()  
     if favorite:
         db.session.delete(favorite)
